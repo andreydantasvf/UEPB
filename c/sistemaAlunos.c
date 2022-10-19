@@ -41,9 +41,10 @@ int main(void) {
         printf("Digite a terceiras nota do %dº aluno: ", i+1);
         scanf("%f", &alunos[i].provas.prova3);
         alunos[i].media = (alunos[i].provas.prova1 + alunos[i].provas.prova2 + alunos[i].provas.prova3) / 3;
+        printf("\n");
     }
 
-    printf("O aluno com maior média foi: %s\n", alunos[MaiorMedia(alunos, 5)].nome);
+    printf("\n\nO aluno com maior média foi: %s\n", alunos[MaiorMedia(alunos, 5)].nome);
     printf("O aluno com menor média foi: %s\n", alunos[MenorMedia(alunos, 5)].nome);
     printf("O aluno com maior nota da prova1 foi: %s\n", alunos[MaiorNotaProva1(alunos, 5)].nome);
     SituacaoAluno(alunos, 5);
@@ -76,7 +77,7 @@ int MaiorNotaProva1(struct Aluno alunos[], int tamanho) {
 
 int MaiorMedia(struct Aluno alunos[], int tamanho) {
     float maiorMedia = 0;
-    int index;
+    int index = 0;
 
     for(int i = 0; i < tamanho; i++) {
         if(alunos[i].media > maiorMedia) {
@@ -90,9 +91,9 @@ int MaiorMedia(struct Aluno alunos[], int tamanho) {
 
 int MenorMedia(struct Aluno alunos[], int tamanho) {
     float menorMedia = alunos[0].media;
-    int index;
+    int index = 0;
 
-    for(int i = 0; i < tamanho; i++) {
+    for(int i = 1; i < tamanho; i++) {
         if(alunos[i].media < menorMedia) {
             menorMedia = alunos[i].media;
             index = i;
