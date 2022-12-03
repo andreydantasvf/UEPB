@@ -1,3 +1,30 @@
+def quantLacos(grafo):
+    lacos = 0
+
+    for i in range(len(grafo)):
+        for j in range(len(grafo[i])):
+            if(grafo[i][j] == i):
+                lacos += 1
+    return lacos
+
+def maiorGrau(grafo):
+    maior = len(grafo[0])
+
+    for i in range(1, len(grafo)):
+        if(len(grafo[i]) > maior):
+            maior = len(grafo[i])
+
+    return maior
+
+def menorGrau(grafo):
+    menor = len(grafo[0])
+
+    for i in range(1, len(grafo)):
+        if(len(grafo[i]) < menor):
+            menor = len(grafo[i])
+
+    return menor
+
 print("Representação por lista\n")
 
 quantVertices = int(input("Digite a quantidade de vértices: "))
@@ -37,11 +64,14 @@ while opcao != 0:
     opcao = int(input("Escolha uma das opções acima: "))
 
     if(opcao == 1):
-        print("caso 1")
+        lacos = quantLacos(grafo)
+        print(f"Seu grafo possui {lacos} laços!")
     elif(opcao == 2):
-        print("caso 2")
+        maior = maiorGrau(grafo)
+        print(f"O maior Grau do seu grafo é {maior}")
     elif(opcao == 3):
-        print("caso 3")
+        menor = menorGrau(grafo)
+        print(f"O menor Grau do seu grafo é {menor}")
     elif(opcao == 4):
         print("caso 4")
     elif(opcao == 5):
