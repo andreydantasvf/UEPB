@@ -1,3 +1,4 @@
+#------------ Funções ---------------
 def quantLacos(grafo):
     lacos = 0
 
@@ -25,6 +26,40 @@ def menorGrau(grafo):
 
     return menor
 
+def isMultigrafo(grafo):
+    for i in range(len(grafo)):
+        for j in range(len(grafo[i])):
+            if(i in grafo[grafo[i][j]] and i != grafo[i][j]):
+                return True
+    return False
+
+def isGrafoSimples(grafo):
+    if(not isMultigrafo(grafo) and quantLacos(grafo) == 0):
+        return True
+    else:
+        return False
+
+def verticeIsolado(grafo):
+    for i in range(len(grafo)):
+        for j in range(len(grafo)):
+            if(not i in grafo[j] and len(grafo[i]) == 0):
+                return True
+    return False
+
+def verticeFolha(grafo):
+    for i in range(len(grafo)):
+        if(not i in grafo[i] and len(grafo[i]) == 1):
+            return True
+    return False
+
+def grafoCompleto(grafo):
+    for i in range(len(grafo)):
+        for j in range(len(grafo)):
+            if(not (i in grafo[j] or j in grafo[i]) and i != j):
+                return False
+    return True
+
+#------------ Main ---------------
 print("Representação por lista\n")
 
 quantVertices = int(input("Digite a quantidade de vértices: "))
@@ -59,6 +94,7 @@ while opcao != 0:
     print("4 - Saber se é um multigrafo")
     print("5 - Saber se é um grafo Simples")
     print("6 - Verificar se existe vértice isolado")
+    print("7 - Verificar se existe vértice folha")
     print("8 - Verfiicar se é um grafo completo")
     print("0 - Sair")
     opcao = int(input("Escolha uma das opções acima: "))
@@ -73,15 +109,30 @@ while opcao != 0:
         menor = menorGrau(grafo)
         print(f"O menor Grau do seu grafo é {menor}")
     elif(opcao == 4):
-        print("caso 4")
+        if(isMultigrafo(grafo)):
+            print("É um multigrafo!")
+        else:
+            print("Não é um multigrafo!")
     elif(opcao == 5):
-        print("caso 5")
+        if(isGrafoSimples(grafo)):
+            print("É um grafo simples!")
+        else:
+            print("Não é um grafo simples!")
     elif(opcao == 6):
-        print("caso 6")
+        if(verticeIsolado(grafo)):
+            print("Possui vértice isolado!")
+        else:
+            print("Não possui vértice isolado!")
     elif(opcao == 7):
-        print("caso 7")
+        if(verticeFolha(grafo)):
+            print("Possui vértice folha!")
+        else:
+            print("Não possui vértice folha!")
     elif(opcao == 8):
-        print("caso 8")
+        if(grafoCompleto(grafo)):
+            print("É um grafo completo!")
+        else:
+            print("Não é um grafo completo!")
     elif(opcao == 0):
         print("Finalizando...")
     else:
