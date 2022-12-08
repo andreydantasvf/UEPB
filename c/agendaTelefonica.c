@@ -2,20 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Contact {
+typedef struct Contact
+{
     char nome[40], email[40];
     char telefone[15], celular[15];
     struct Contact *nextContact;
 } Contact;
 
-typedef struct {
+typedef struct
+{
     Contact *initialContact;
 } Agenda;
 
 void insertContact(Agenda *agenda, char *nome, char *email, char *telefone, char *celular);
 void showContacts(Agenda *agenda);
 void searchContact(Agenda *agenda, char *nome);
-Contact* removeContact(Agenda *agenda, char *nome);
+Contact *removeContact(Agenda *agenda, char *nome);
+
+Agenda readFile();
+void fileInsert(Agenda *agenda);
 
 int main(void)
 {
@@ -27,13 +32,16 @@ int main(void)
     // Iniciando o nó agenda
     agenda.initialContact = NULL;
 
-    do {
+    agenda = readFile();
+
+    do
+    {
         printf("\n-----------------------------------------\n");
         printf("1 - Inserir Contato\n");
         printf("2 - Listar Contatos\n");
         printf("3 - Buscar Contato\n");
         printf("4 - Remover Contato\n");
-        printf("0 - Sair\n");
+        printf("0 - Sair e Salvar\n");
 
         printf("Escolha uma opção: ");
         scanf("%d", &option);
@@ -75,7 +83,8 @@ int main(void)
             printf("Digite o Nome do contato que deseja remover: ");
             fgets(nome, 40, stdin);
             contatoRemovido = removeContact(&agenda, nome);
-            if(contatoRemovido != NULL) {
+            if (contatoRemovido != NULL)
+            {
                 printf("\nContato removido!");
                 printf("\nNome: %s", contatoRemovido->nome);
                 printf("Email: %s", contatoRemovido->email);
@@ -83,11 +92,13 @@ int main(void)
                 printf("Celular: %s\n", contatoRemovido->celular);
                 free(contatoRemovido);
             }
-            else {
+            else
+            {
                 printf("\nO contato que você deseja remover NÃO existe!");
             }
             break;
         case 0:
+            fileInsert(&agenda);
             break;
         default:
             printf("Opção invalida, tente novamente! \n");
@@ -99,9 +110,10 @@ int main(void)
 // Funções
 
 // Inserir um novo contato na agenda
-void insertContact(Agenda *agenda, char *nome, char *email, char *telefone, char *celular) {
+void insertContact(Agenda *agenda, char *nome, char *email, char *telefone, char *celular)
+{
     // Alocando a memoria do tipo Contact
-    Contact *new, *newContact = (Contact*)malloc(sizeof(Contact));
+    Contact *new, *newContact = (Contact *)malloc(sizeof(Contact));
 
     // Colocando valores nas propriedades do Contato
     strcpy(newContact->nome, nome);
@@ -111,12 +123,15 @@ void insertContact(Agenda *agenda, char *nome, char *email, char *telefone, char
     newContact->nextContact = NULL;
 
     // verificando de a lista está vazia
-    if(agenda->initialContact == NULL) {
+    if (agenda->initialContact == NULL)
+    {
         agenda->initialContact = newContact;
     }
-    else {
+    else
+    {
         new = agenda->initialContact;
-        while(new->nextContact != NULL) {
+        while (new->nextContact != NULL)
+        {
             new = new->nextContact;
         }
         new->nextContact = newContact;
@@ -124,11 +139,14 @@ void insertContact(Agenda *agenda, char *nome, char *email, char *telefone, char
 }
 
 // Mostrar todos os Contatos
-void showContacts(Agenda *agenda) {
+void showContacts(Agenda *agenda)
+{
     Contact *initial = agenda->initialContact;
-    if(initial != NULL) {
+    if (initial != NULL)
+    {
         printf("Lista de Contatos!\n");
-        while(initial != NULL) {
+        while (initial != NULL)
+        {
             printf("\nNome: %s", initial->nome);
             printf("Email: %s", initial->email);
             printf("Telefone: %s", initial->telefone);
@@ -136,17 +154,22 @@ void showContacts(Agenda *agenda) {
             initial = initial->nextContact;
         }
     }
-    else {
+    else
+    {
         printf("Não existe nenhum Contato registrado!\n");
     }
 }
 
 // Buscar um contato pelo nome
-void searchContact(Agenda *agenda, char *nome) {
+void searchContact(Agenda *agenda, char *nome)
+{
     Contact *initial = agenda->initialContact;
-    if(initial != NULL) {
-        while(initial != NULL) {
-            if(strcmp(initial->nome, nome) == 0) {
+    if (initial != NULL)
+    {
+        while (initial != NULL)
+        {
+            if (strcmp(initial->nome, nome) == 0)
+            {
                 printf("Contato encontrado!\n");
                 printf("\nNome: %s", initial->nome);
                 printf("Email: %s", initial->email);
@@ -161,29 +184,71 @@ void searchContact(Agenda *agenda, char *nome) {
 }
 
 // Remover um contato da Agenda
-Contact* removeContact(Agenda *agenda, char *nome) {
+Contact *removeContact(Agenda *agenda, char *nome)
+{
     // Criando os nós auxiliares
     Contact *auxiliar, *remover = NULL;
 
     // Verificando se a Agenda não está vazia
-    if(agenda->initialContact) {
+    if (agenda->initialContact)
+    {
         // Verificando se o valor para ser removido está no inicio da Agenda
-        if(strcmp(agenda->initialContact->nome, nome) == 0) {
+        if (strcmp(agenda->initialContact->nome, nome) == 0)
+        {
             // Alterando a ligação dos nós
             remover = agenda->initialContact;
             agenda->initialContact = remover->nextContact;
         }
-        else {
+        else
+        {
             auxiliar = agenda->initialContact;
-            while(auxiliar->nextContact && strcmp(auxiliar->nextContact->nome, nome) != 0) {
+            while (auxiliar->nextContact && strcmp(auxiliar->nextContact->nome, nome) != 0)
+            {
                 auxiliar = auxiliar->nextContact;
             }
             // Verificando se o nome procurado foi encontrado na Agenda
-            if(auxiliar->nextContact) {
+            if (auxiliar->nextContact)
+            {
                 remover = auxiliar->nextContact;
                 auxiliar->nextContact = remover->nextContact;
             }
         }
     }
     return remover;
+}
+
+// Salvando os contatos em um arquivo
+void fileInsert(Agenda *agenda)
+{
+    FILE *file = fopen("agenda.txt", "w");
+    Contact *initial = agenda->initialContact;
+
+    if (initial != NULL)
+    {
+        while (initial != NULL)
+        {
+            fwrite(initial, sizeof(Contact), 1, file);
+            initial = initial->nextContact;
+        }
+        fclose(file);
+    }
+}
+
+// Lendo todos os contatos dos arquivos
+Agenda readFile()
+{
+    FILE *file = fopen("agenda.txt", "r");
+    if (file != NULL)
+    {
+        Agenda agenda;
+        agenda.initialContact = NULL;
+        Contact contact;
+
+        while (fread(&contact, sizeof(Contact), 1, file))
+        {
+            insertContact(&agenda, contact.nome, contact.email, contact.telefone, contact.celular);
+        }
+        fclose(file);
+        return agenda;
+    }
 }
