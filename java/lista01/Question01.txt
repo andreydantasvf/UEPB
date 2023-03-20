@@ -1,0 +1,3 @@
+Na compilação o compilador traduz o código escrito na línguagem de programação e gerará um código escrito em línguagem de máquina. Uma das desvantagens da compilação é que o código feito para um sistema operacional só funcionará perfeito nele, o que também pode ser uma das vantagens.
+
+Já na interpretação, o código escrito em uma línguagem de programção sera executada pelo seu interpretador pessual, o que faz com que ela precise de mais recursos do que a compilação.
