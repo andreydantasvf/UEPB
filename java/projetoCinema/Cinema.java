@@ -23,44 +23,69 @@ public class Cinema {
 
             switch (opcao) {
                 case 1:
-                    menu("Sala do Cinema");
-                    listarCadeiras();
+                    menu("Compra de Ingressos");
 
-                    System.out.print("As seguintes cadeiras estao ocupadas: ");
-                    for (int cadeira : cadeirasOcupadas) {
-                        System.out.printf("%d ", cadeira);
+                    double valorIngresso = 10.90, totalValor = 0;
+
+                    System.out.print("Digite a quantidade de ingressos: ");
+                    int quantidade = sc.nextInt();
+
+                    for(int i = 0; i < quantidade; i++) {
+                        menu("Lista dos filmes");
+                        int aux = 0;
+                        for(Filme filme : filmes) {
+                            System.out.printf("[%d] - Nome: %s; Horario: %s; Classificação: %d anos\n", aux, filme.nome, filme.horario, filme.classificacao);
+                            aux++;
+                        }
+                        System.out.print("Escolha um dos filmes: \n");
+                        int opcaoFilme = sc.nextInt();
+                        sc.nextLine();
+
+                        menu("Sala do Cinema");
+                        listarCadeiras(filmes.get(opcaoFilme).getCadeiras());
+
+                        System.out.print("As seguintes cadeiras estao ocupadas: ");
+                        for (int cadeira : filmes.get(opcaoFilme).getCadeirasOcupadas()) {
+                            System.out.printf("%d ", cadeira);
+                        }
+
+                        System.out.print("\nEscolha uma cadeira: ");
+                        int cadeiraSelecionada = sc.nextInt();
+
+                        if(verificarCadeiraOcupada(cadeiraSelecionada, filmes.get(opcaoFilme).getCadeirasOcupadas())) {
+                            System.out.println("Essa cadeira ja esta ocupada.");
+                        } else {
+                            filmes.get(opcaoFilme).setCadeirasOcupadas(cadeiraSelecionada);
+                            System.out.println("Ingresso comprado com sucesso!");
+                            totalValor += valorIngresso;
+                        }
                     }
 
-                    System.out.print("\nEscolha uma cadeira: ");
-                    int cadeiraSelecionada = sc.nextInt();
+                    System.out.printf("Valor total: R$ %.2f%n", totalValor);
 
-                    if(verificarCadeiraOcupada(cadeiraSelecionada, cadeirasOcupadas)) {
-                        System.out.println("Essa cadeira ja esta ocupada.");
-                    } else {
-                        cadeirasOcupadas.add(cadeiraSelecionada);
-                    }
                     break;
                 case 2:
                     menu("Lista dos filmes");
                     for(Filme filme : filmes) {
                         System.out.printf("Nome: %s%n", filme.nome);
-                        System.out.printf("Data: %s%n", filme.data);
+                        System.out.printf("Data: %s%n", filme.classificacao);
                         System.out.printf("Horario: %s%n%n", filme.horario);
                     }
                     break;
                 case 3:
                     System.out.print("Digite o nome do filme: ");
                     String nome = sc.nextLine();
-                    System.out.print("Digite a data de estreia do filme: ");
-                    String data = sc.nextLine();
+                    System.out.print("Digite a classificação de idade do filme: ");
+                    int classificacao = sc.nextInt();
+                    sc.nextLine();
                     System.out.print("Digite o horario do filme: ");
                     String horario = sc.nextLine();
 
-                    Filme novoFilme = new Filme(nome, data, horario);
+                    Filme novoFilme = new Filme(nome, classificacao, horario);
                     filmes.add(novoFilme);
                     break;
                 case 0:
-                    System.out.println("Valeu chef!");
+                    System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida, tente novamente!");
@@ -80,9 +105,7 @@ public class Cinema {
         return false;
     }
 
-    public static void listarCadeiras() {
-        int cadeiras[][] = new int[5][5];
-
+    public static void listarCadeiras(int[][] cadeiras) {
         int aux = cadeiras.length * cadeiras[0].length;
         for (int i = 0; i < cadeiras.length; i++) {
             for (int j = 0; j < cadeiras.length; j++) {
