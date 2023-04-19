@@ -9,7 +9,6 @@ public class Cinema {
 
         int opcao;
         ArrayList<Filme> filmes = new ArrayList();
-        ArrayList<Integer> cadeirasOcupadas = new ArrayList();
 
         do {
             menu("Bem vindo ao CINEMA!");
@@ -23,66 +22,13 @@ public class Cinema {
 
             switch (opcao) {
                 case 1:
-                    menu("Compra de Ingressos");
-
-                    double valorIngresso = 10.90, totalValor = 0;
-
-                    System.out.print("Digite a quantidade de ingressos: ");
-                    int quantidade = sc.nextInt();
-
-                    for(int i = 0; i < quantidade; i++) {
-                        menu("Lista dos filmes");
-                        int aux = 0;
-                        for(Filme filme : filmes) {
-                            System.out.printf("[%d] - Nome: %s; Horario: %s; Classificação: %d anos\n", aux, filme.nome, filme.horario, filme.classificacao);
-                            aux++;
-                        }
-                        System.out.print("Escolha um dos filmes: \n");
-                        int opcaoFilme = sc.nextInt();
-                        sc.nextLine();
-
-                        menu("Sala do Cinema");
-                        listarCadeiras(filmes.get(opcaoFilme).getCadeiras());
-
-                        System.out.print("As seguintes cadeiras estao ocupadas: ");
-                        for (int cadeira : filmes.get(opcaoFilme).getCadeirasOcupadas()) {
-                            System.out.printf("%d ", cadeira);
-                        }
-
-                        System.out.print("\nEscolha uma cadeira: ");
-                        int cadeiraSelecionada = sc.nextInt();
-
-                        if(verificarCadeiraOcupada(cadeiraSelecionada, filmes.get(opcaoFilme).getCadeirasOcupadas())) {
-                            System.out.println("Essa cadeira ja esta ocupada.");
-                        } else {
-                            filmes.get(opcaoFilme).setCadeirasOcupadas(cadeiraSelecionada);
-                            System.out.println("Ingresso comprado com sucesso!");
-                            totalValor += valorIngresso;
-                        }
-                    }
-
-                    System.out.printf("Valor total: R$ %.2f%n", totalValor);
-
+                    comprarIngressos(filmes, sc);
                     break;
                 case 2:
-                    menu("Lista dos filmes");
-                    for(Filme filme : filmes) {
-                        System.out.printf("Nome: %s%n", filme.nome);
-                        System.out.printf("Data: %s%n", filme.classificacao);
-                        System.out.printf("Horario: %s%n%n", filme.horario);
-                    }
+                    listarFilmes(filmes);
                     break;
                 case 3:
-                    System.out.print("Digite o nome do filme: ");
-                    String nome = sc.nextLine();
-                    System.out.print("Digite a classificação de idade do filme: ");
-                    int classificacao = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Digite o horario do filme: ");
-                    String horario = sc.nextLine();
-
-                    Filme novoFilme = new Filme(nome, classificacao, horario);
-                    filmes.add(novoFilme);
+                    adicionarFilme(filmes, sc);
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -91,18 +37,60 @@ public class Cinema {
                     System.out.println("Opção inválida, tente novamente!");
             }
         } while (opcao != 0);
-
-
-        sc.close();
     }
 
-    public static Boolean verificarCadeiraOcupada(int cadeiraSelecionada, ArrayList<Integer> cadeirasOcupadas) {
-        for(int cadeira : cadeirasOcupadas) {
-            if(cadeira == cadeiraSelecionada) {
-                return true;
+    public static void menu(String titulo) {
+        System.out.println("---------------------------");
+        System.out.printf("  %s%n", titulo);
+        System.out.println("---------------------------");
+    }
+
+    public static void comprarIngressos(ArrayList<Filme> filmes, Scanner sc) {
+        menu("Compra de Ingressos");
+        double valorIngresso = 10.90, totalValor = 0;
+
+        System.out.print("Digite a quantidade de ingressos: ");
+        int quantidade = sc.nextInt();
+
+        for (int i = 0; i < quantidade; i++) {
+            int opcaoFilme = escolherFilme(filmes, sc);
+
+            menu("Sala do Cinema");
+            listarCadeiras(filmes.get(opcaoFilme).getCadeiras());
+            mostrarCadeirasOcupadas(filmes, opcaoFilme);
+
+            if (escolherCadeira(sc, filmes, opcaoFilme)) {
+                totalValor += valorIngresso;
             }
         }
-        return false;
+
+        System.out.printf("Valor total: R$ %.2f%n", totalValor);
+    }
+
+    public static int escolherFilme(ArrayList<Filme> filmes, Scanner sc) {
+        listarFilmes(filmes);
+        System.out.print("Escolha um dos filmes: \n");
+        int opcaoFilme = sc.nextInt();
+        sc.nextLine();
+
+        if (!filmeExiste(opcaoFilme, filmes)) {
+            System.out.println("Não temos esse filme cadastrado!");
+            return escolherFilme(filmes, sc);
+        }
+        return opcaoFilme;
+    }
+
+    public static void listarFilmes(ArrayList<Filme> filmes) {
+        menu("Lista dos filmes");
+        int aux = 0;
+        for (Filme filme : filmes) {
+            System.out.printf("[%d] - Nome: %s; Horario: %s; Classificação: %d anos\n", aux, filme.nome, filme.horario, filme.classificacao);
+            aux++;
+        }
+    }
+
+    public static Boolean filmeExiste(int opcaoFilme, ArrayList<Filme> filmes) {
+        return opcaoFilme >= 0 && opcaoFilme < filmes.size();
     }
 
     public static void listarCadeiras(int[][] cadeiras) {
@@ -116,9 +104,39 @@ public class Cinema {
         }
     }
 
-    public static void menu(String titulo) {
-        System.out.println("---------------------------");
-        System.out.printf("  %s%n", titulo);
-        System.out.println("---------------------------");
+    public static void mostrarCadeirasOcupadas(ArrayList<Filme> filmes, int opcaoFilme) {
+        System.out.print("As seguintes cadeiras estao ocupadas: ");
+        for (int cadeira : filmes.get(opcaoFilme).getCadeirasOcupadas()) {
+            System.out.printf("%d ", cadeira);
+        }
+    }
+
+    public static Boolean escolherCadeira(Scanner sc, ArrayList<Filme> filmes, int opcaoFilme) {
+        System.out.print("\nEscolha uma cadeira: ");
+        int cadeiraSelecionada = sc.nextInt();
+
+        if (cadeiraEstaOcupada(cadeiraSelecionada, filmes.get(opcaoFilme).getCadeirasOcupadas())) {
+            System.out.println("Essa cadeira ja esta ocupada.");
+            return escolherCadeira(sc, filmes, opcaoFilme);
+        }
+        filmes.get(opcaoFilme).setCadeirasOcupadas(cadeiraSelecionada);
+        System.out.println("Ingresso comprado com sucesso!");
+        return true;
+    }
+
+    public static Boolean cadeiraEstaOcupada(int cadeiraSelecionada, ArrayList<Integer> cadeirasOcupadas) {
+        return cadeirasOcupadas.contains(cadeiraSelecionada);
+    }
+
+    public static void adicionarFilme(ArrayList<Filme> filmes, Scanner sc) {
+        System.out.print("Digite o nome do filme: ");
+        String nome = sc.nextLine();
+        System.out.print("Digite a classificação de idade do filme: ");
+        int classificacao = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Digite o horario do filme: ");
+        String horario = sc.nextLine();
+        Filme novoFilme = new Filme(nome, classificacao, horario);
+        filmes.add(novoFilme);
     }
 }
