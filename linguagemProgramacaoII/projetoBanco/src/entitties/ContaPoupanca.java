@@ -8,15 +8,11 @@ public class ContaPoupanca extends ContaBancaria {
         this.taxaRendimento = 0.01;
     }
 
-    public void sacar(double valor, boolean aumentarTaxaRendimento) {
+    public void depositar(double valor, boolean aumentarTaxaRendimento) {
         if (aumentarTaxaRendimento) {
-            if (valor <= saldo - 5.00) {
-                saldo -= valor + 5.00;
-                taxaRendimento += 0.005;
-                System.out.println("Saque realizado com sucesso!");
-            } else {
-                System.out.println("Saldo insuficiente!");
-            }
+            saldo += valor - 5.00;
+            taxaRendimento += 0.003;
+            System.out.println("Deposito realizado com sucesso!");
         } else {
             super.sacar(valor);
         }

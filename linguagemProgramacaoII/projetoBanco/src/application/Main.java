@@ -47,7 +47,7 @@ public class Main {
         do {
             System.out.println("\n\n[1] - Realizar Deposito");
             System.out.println("[2] - Realizar Saque");
-            System.out.println("[3] - Realizar Saque e aumentar a taxa de rendimento");
+            System.out.println("[3] - Realizar Deposito e aumentar a taxa de rendimento");
             System.out.println("[4] - Ver Detalhes da Conta");
             System.out.println("[0] - Sair");
             System.out.print("Escolha uma opcao: ");
@@ -66,9 +66,9 @@ public class Main {
                     contaPoupanca.sacar(valor);
                     break;
                 case 3:
-                    System.out.print("Digite o valor que deseja sacar: ");
+                    System.out.print("Digite o valor do seu deposito(OBS: Tera uma taxa de R$ 5.00): ");
                     valor = sc.nextDouble();
-                    contaPoupanca.sacar(valor, true);
+                    contaPoupanca.depositar(valor, true);
                     break;
                 case 4:
                     System.out.println(contaPoupanca);
