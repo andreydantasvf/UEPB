@@ -2,7 +2,10 @@ package application;
 
 import entitties.ContaCorrente;
 import entitties.ContaPoupanca;
+import entitties.Data;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -41,7 +44,16 @@ public class Main {
     }
 
     public static void menuContaPoupanca(String titular, Scanner sc) {
-        ContaPoupanca contaPoupanca = new ContaPoupanca(titular);
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTime(new Date());
+
+        int dia = calendario.get(Calendar.DATE);
+        int mes = calendario.get(Calendar.MONTH);
+        int ano = calendario.get(Calendar.YEAR);
+
+        Data dataCriacao = new Data(dia, mes, ano);
+
+        ContaPoupanca contaPoupanca = new ContaPoupanca(titular, dataCriacao);
         int opcaoMenuConta = 1;
 
         do {
@@ -84,7 +96,16 @@ public class Main {
     }
 
     public static void menuContaCorrente(String titular, Scanner sc) {
-        ContaCorrente contaCorrente = new ContaCorrente(titular, 50.00);
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTime(new Date());
+
+        int dia = calendario.get(Calendar.DATE);
+        int mes = calendario.get(Calendar.MONTH);
+        int ano = calendario.get(Calendar.YEAR);
+
+        Data dataCriacao = new Data(dia, mes, ano);
+
+        ContaCorrente contaCorrente = new ContaCorrente(titular, dataCriacao, 50.00);
         int opcaoMenuConta = 1;
 
         do {

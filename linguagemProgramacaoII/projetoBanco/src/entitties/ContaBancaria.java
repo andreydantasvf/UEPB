@@ -3,9 +3,11 @@ package entitties;
 public class ContaBancaria {
     protected String titular;
     protected double saldo;
+    protected Data dataCriacao;
 
-    public ContaBancaria(String titular) {
+    public ContaBancaria(String titular, Data dataCriacao) {
         this.titular = titular;
+        this.dataCriacao = dataCriacao;
         this.saldo = 0.0;
     }
 

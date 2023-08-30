@@ -3,8 +3,8 @@ package entitties;
 public class ContaPoupanca extends ContaBancaria {
     private double taxaRendimento;
 
-    public ContaPoupanca(String titular) {
-        super(titular);
+    public ContaPoupanca(String titular, Data dataCriacao) {
+        super(titular, dataCriacao);
         this.taxaRendimento = 0.01;
     }
 
@@ -14,7 +14,7 @@ public class ContaPoupanca extends ContaBancaria {
             taxaRendimento += 0.003;
             System.out.println("Deposito realizado com sucesso!");
         } else {
-            super.sacar(valor);
+            super.depositar(valor);
         }
     }
 

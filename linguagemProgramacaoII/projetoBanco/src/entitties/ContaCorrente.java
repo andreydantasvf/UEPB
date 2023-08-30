@@ -3,8 +3,8 @@ package entitties;
 public class ContaCorrente extends ContaBancaria {
     private double limiteChequeEspecial;
 
-    public ContaCorrente(String titular, double limiteChequeEspecial) {
-        super(titular);
+    public ContaCorrente(String titular, Data dataCriacao, double limiteChequeEspecial) {
+        super(titular, dataCriacao);
         this.limiteChequeEspecial = limiteChequeEspecial;
     }
 
