@@ -1,5 +1,0 @@
-Identificadores válidos: 10fone$com, #media, média.
-
-nome*usuario -> '*' é um operador aritmético;
-end*a-6 -> '*' e '-' são operadores aritméticos;
-nome aluno -> Não se pode conter espaços em um identificador.
