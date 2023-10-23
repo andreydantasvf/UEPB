@@ -9,7 +9,7 @@ public interface ListaEncadeada_IF {
 
     public int size();
 
-    public int search(Integer element) throws Exception; //lançar exceção caso não encontre
+    public Integer search(Integer element) throws Exception; //lançar exceção caso não encontre
 
     public void insert(Integer element); //deve-se inserir no início da lista
 

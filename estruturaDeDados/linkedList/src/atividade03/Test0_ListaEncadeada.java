@@ -39,9 +39,9 @@ public class Test0_ListaEncadeada {
         l.insert(2);
         l.insert(3);
 
-        assertEquals(1, l.search(1));
-        assertEquals(2, l.search(2));
-        assertEquals(3, l.search(3));
+        assertEquals(Integer.valueOf(1), l.search(1));
+        assertEquals(Integer.valueOf(2), l.search(2));
+        assertEquals(Integer.valueOf(3), l.search(3));
 
         try {
             l.search(4);
